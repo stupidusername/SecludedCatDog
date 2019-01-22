@@ -12,7 +12,10 @@
 
 ## Installation
 
-- Create a `config.ini`. Change the database DSN and the secret key used for cookies. Use `config-example.ini` as reference.
+- Create a `config.ini`. Use `config-example.ini` as reference.
+- Change the database DSN.
+- Change the secret key used for cookies.
+- Set the user and password used for Social Catfish.
 - Apply DB migrations: `$ alembic upgrade head`.
 
 
