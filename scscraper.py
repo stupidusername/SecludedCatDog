@@ -13,7 +13,11 @@ class SCScraperException(Exception):
 class SCScraper(object):
     """
     Social Catfish scraper.
+
+    :const str SEARCH_URL: identity search URL.
     """
+
+    SEARCH_URL 'https://socialcatfish.com/search.html'
 
     def __init__(self):
         self._session = Session()
@@ -27,7 +31,16 @@ class SCScraper(object):
         """
         if '@' in param:
             # The search param is an email.
-            return 'email'
+            params = {
+                'email': param,
+                'search_type': 1
+            }
         else:
             # The search param is a phone number.
-            return 'phone_number'
+            params = {
+                'phone': param,
+                'phone': 3
+            }
+        # The country code of the search parameters appears to be always the
+        # same one.
+        params['country'] = 'US'
