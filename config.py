@@ -22,3 +22,15 @@ class Config(object):
         :returns: Database DSN.
         """
         return self._config['DEFAULT']['sqlalchemy.url']
+
+    def get_sc_username(self) -> str:
+        """
+        :returns: Social Catfish user.
+        """
+        return self._config['DEFAULT']['sc_username']
+
+    def get_sc_password(self) -> str:
+        """
+        :returns: Social Catfish password.
+        """
+        return self._config['DEFAULT']['sc_password']
