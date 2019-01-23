@@ -14,6 +14,6 @@ api = Api(app)
 # Add API endpoints.
 api.add_resource(
     Search,
-    '/api/search/<str:param>',
-    '/api/search/<str:param>/rescrap',
+    '/api/search/<string:param>',
+    '/api/search/<string:param>/rescrap',
 )
