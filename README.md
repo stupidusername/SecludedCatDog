@@ -28,7 +28,7 @@ Note: Dates and times are displayed in UTC.
 
 ## API endpoints
 
-- `/search/<param>[/rescrap]`
+- `/api/search/<param>[/rescrap]`
 
   Search an identity by its email or phone number. If the identity is already stored in the database the result will be retrieved from it.
   Adding `/rescrap` at the end of the request path the information will queried again and the new results will be saved in the database.
