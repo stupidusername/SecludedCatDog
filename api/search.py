@@ -1,3 +1,4 @@
+from createapp import sc_scraper
 from flask_restful import Resource
 
 
@@ -13,4 +14,4 @@ class Search(Resource):
         :param str id: Email or phone number of the entity to be searched.
         :returns: A dictionary with the information of an entity.
         """
-        return param
+        return sc_scraper.search(param)

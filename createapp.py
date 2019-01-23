@@ -1,10 +1,14 @@
+from config import Config
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from config import Config
+from scscraper import SCScraper
 from werkzeug.exceptions import InternalServerError
 
 # Create the global SQLAlchemy object.
 db = SQLAlchemy()
+
+# Create a global instance of the Social Catfish Scraper.
+sc_scraper = SCScraper()
 
 
 def create_app() -> Flask:
