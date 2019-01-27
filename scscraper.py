@@ -1,5 +1,6 @@
 from config import Config
 from lxml import html
+import re
 from requests import Response, Session
 from typing import Optional
 
@@ -64,8 +65,13 @@ class SCScraper(object):
         # Use the URL value to determine if we need to login, the identity was
         # not found or if the identity was found and returned.
         if '/search/' in r_url:
-            # Identity not found.
-            return None
+            # Response differs based on the type of the search.
+            if '@' in param:
+                # Identity not found.
+                return None
+            elif r_url.endswith('-0/'):
+                # Identity not found.
+                return None
         elif '/search-data.html' in r_url:
             # We need to login.
             self._login()
@@ -78,7 +84,11 @@ class SCScraper(object):
             # Get the new URL value.
             r_url = self._get_response_url(r)
         # Check if we have the identity information.
-        if '/person/' not in r_url:
+        # Response differs based on the type of the search.
+        if '@' in param:
+            if '/person/' not in r_url:
+                raise SCScraperException('Identity information not found.')
+        elif not re.search(r'-([1-9]|\d\d+)/$', r_url):
             raise SCScraperException('Identity information not found.')
         return ':D'
 
