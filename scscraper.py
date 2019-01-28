@@ -91,7 +91,7 @@ class SCScraper(object):
         elif not re.search(r'-([1-9]|\d\d+)/$', r_url):
             raise SCScraperException('Identity information not found.')
         # Get and return the identity information.
-        return self._get_identity(self, r_url)
+        return self._get_identity(r_url)
 
     def _get_response_url(self, r: Response) -> str:
         """
@@ -141,5 +141,65 @@ class SCScraper(object):
         :param str url: Social Catfish identity URL.
         :returns: A dictionary containing the identity information.
         """
-        r = self._session.get(r_url)
-        return r.text
+        # Make the request to the identity result page.
+        r = self._session.get(url)
+        # Build HTML tree from response.
+        tree = html.fromstring(r.content)
+        # Create default information.
+        identity = {
+            'name': None,
+            'gender': None,
+            'location': None,
+            'possible_names': [],
+            'photos': [],
+            'phone_numbers': [],
+            'locations': [],
+            'urls': [],
+            'relationships': [],
+            'usernames': []
+        }
+        # Get name.
+        es = tree.xpath("//div[contains(@class, 'info general')]/h3")
+        if es:
+            identity['name'] = es[0].text_content()
+        # Get gender.
+        es = tree.xpath("//div[contains(@class, 'info general')]/strong")
+        if es:
+            # This tag contains some unwanted characters.
+            identity['gender'] = \
+                es[0].text_content().replace('/r/n', '').strip()
+        # Get location.
+        es = tree.xpath("//div[contains(@class, 'info general')]/p")
+        if es:
+            identity['location'] = es[0].text_content()
+        # Get posibble names.
+        es = tree.xpath("//div[contains(@class, 'other-names')]/p")
+        for e in es:
+            identity['possible_names'].append(e.text_content())
+        # Get photos.
+        es = tree.xpath("//div[contains(@class, 'img-wrapper')]//img")
+        for e in es:
+            identity['photos'].append(e.get('src'))
+        # Get phone numbers.
+        es = tree.xpath("//div[contains(@class, 'info-section phones')]//h4")
+        for e in es:
+            identity['phone_numbers'].append(e.text_content())
+        # Get locations:
+        es = tree.xpath("//div[contains(@class, 'trigger-map')]")
+        for e in es:
+            # This tag contains some unwanted characters.
+            identity['locations'].append(e.text.replace('/r/n', '').strip())
+        # Get urls.
+        es = tree.xpath("//div[contains(@class, 'url')]/a")
+        for e in es:
+            identity['urls'].append(e.get('href'))
+        # Get relationships.
+        es = tree.xpath("//div[contains(@class, 'period relations')]/div")
+        for e in es:
+            identity['relationships'].append(e.get('title'))
+        # Get usernames.
+        es = tree.xpath("//div[contains(@class, 'period username')]/div")
+        for e in es:
+            identity['usernames'].append(e.text)
+        # Return the identity information.
+        return identity
