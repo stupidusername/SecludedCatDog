@@ -90,7 +90,8 @@ class SCScraper(object):
                 raise SCScraperException('Identity information not found.')
         elif not re.search(r'-([1-9]|\d\d+)/$', r_url):
             raise SCScraperException('Identity information not found.')
-        return ':D'
+        # Get and return the identity information.
+        return self._get_identity(self, r_url)
 
     def _get_response_url(self, r: Response) -> str:
         """
@@ -132,3 +133,13 @@ class SCScraper(object):
                 'The login into Social Catfish was not sucessful. Check the '
                 'access credentials in the app configuration.'
             )
+
+    def _get_identity(self, url: str) -> dict:
+        """
+        Get the identity information from the given URL.
+
+        :param str url: Social Catfish identity URL.
+        :returns: A dictionary containing the identity information.
+        """
+        r = self._session.get(r_url)
+        return r.text
