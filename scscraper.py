@@ -145,6 +145,12 @@ class SCScraper(object):
         r = self._session.get(url)
         # Build HTML tree from response.
         tree = html.fromstring(r.content)
+        # We may ended up here without logging in.
+        es = tree.xpath("//a[contains(@class, 'proceed-payment')]")
+        if es:
+            # Log in and repeat.
+            self._login()
+            return self._get_identity(url)
         # Create default information.
         identity = {
             'name': None,
