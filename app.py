@@ -1,5 +1,5 @@
 from api.search import Search
-from createapp import create_app, db
+from createapp import create_app
 from flask_restful import Api
 
 # Create the app.
