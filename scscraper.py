@@ -16,7 +16,9 @@ class SCScraper(object):
     """
     Social Catfish scraper.
 
-    :const str SEARCH_URL: identity search URL.
+    :const str SEARCH_URL: Identity search URL.
+    :const str LOGIN_URL: Login URL.
+    :const dict HEADERS: Headers used for post requests.
     """
 
     # Social Catfish URLs
